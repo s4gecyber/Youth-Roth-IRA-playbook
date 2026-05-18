@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Entrepreneur's Roth IRA Playbook — Calculator</title>
+<meta name="description" content="Calculate how funding your child's Roth IRA today translates to startup capital at 18 and a retirement nest egg.">
+<style>
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-2: #f5f4f1;
+  --border: #e7e5e0;
+  --border-strong: #d6d3cd;
+  --text: #1a1a1a;
+  --text-muted: #6b6b66;
+  --text-faint: #9b9a93;
+  --accent: #1e40af;
+  --accent-bg: #eff6ff;
+  --success: #047857;
+  --success-bg: #ecfdf5;
+  --warning: #b45309;
+  --warning-bg: #fffbeb;
+  --danger: #b91c1c;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1011;
+    --surface: #18191b;
+    --surface-2: #1f2022;
+    --border: #2a2b2e;
+    --border-strong: #3a3b3e;
+    --text: #f0efea;
+    --text-muted: #a8a7a2;
+    --text-faint: #6b6a65;
+    --accent: #60a5fa;
+    --accent-bg: #1e3a8a33;
+    --success: #34d399;
+    --success-bg: #06593b33;
+    --warning: #fbbf24;
+    --warning-bg: #78350f33;
+    --danger: #fca5a5;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+header { margin-bottom: 2rem; }
+header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+header p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 56ch;
+}
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+.section h2 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.input-row:last-child { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+.field input[type="number"] {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.field input[type="number"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+.slider-row {
+  margin-bottom: 1rem;
+}
+.slider-row:last-child { margin-bottom: 0; }
+.slider-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.slider-header label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.slider-value {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+}
+input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: 2px;
+}
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: 2px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -8px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  cursor: pointer;
+}
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.presets button {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.presets button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.presets button.active {
+  background: var(--accent);
+  color: var(--surface);
+  border-color: var(--accent);
+}
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.toggle-row input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+.radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.radio-option {
+  position: relative;
+  display: block;
+  padding: 0.85rem 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.radio-option input { position: absolute; opacity: 0; }
+.radio-option:hover { border-color: var(--accent); }
+.radio-option:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.radio-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+.radio-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+}
+.metric {
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+}
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.metric-value {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.metric-detail {
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  margin-top: 0.25rem;
+}
+.metric.success .metric-value { color: var(--success); }
+.metric.warning .metric-value { color: var(--warning); }
+.future {
+  background: var(--accent-bg);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-top: 1rem;
+}
+.future-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+.future-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.future-card .future-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.future-card .future-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.future-card.delta .future-value { color: var(--accent); }
+.future-card .future-note {
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  margin-top: 0.25rem;
+}
+.notice {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0.75rem 1rem;
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--warning);
+  margin-top: 1rem;
+}
+.explainer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.explainer h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+.explainer h3:first-child { margin-top: 0; }
+.explainer ul { margin: 0.5rem 0 0 1.25rem; padding: 0; }
+.explainer li { margin-bottom: 0.4rem; }
+footer {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  line-height: 1.6;
+}
+footer strong { color: var(--text-muted); font-weight: 600; }
+.share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: opacity 0.15s;
+}
+.share:hover { opacity: 0.9; }
+.share.copied { background: var(--success); }
+@media (max-width: 540px) {
+  .wrap { padding: 1.5rem 1rem 3rem; }
+  header h1 { font-size: 1.4rem; }
+  .input-row { grid-template-columns: 1fr; }
+  .radio-group { grid-template-columns: 1fr; }
+  .future-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>The entrepreneur's Roth IRA playbook</h1>
+  <p>Pay your child a real wage through your business, fund their custodial Roth IRA, and turn it into startup capital at 18 and a multi-million-dollar nest egg by 60. Adjust the inputs to model your situation.</p>
+</header>
+
+<div class="section">
+  <h2>Your inputs</h2>
+  <div class="input-row">
+    <div class="field">
+      <label for="age">Child's current age</label>
+      <input type="number" id="age" min="0" max="17" value="8" />
+    </div>
+    <div class="field">
+      <label for="contrib">Annual contribution ($)</label>
+      <input type="number" id="contrib" min="0" max="7500" step="100" value="7500" />
+    </div>
+  </div>
+  <div class="slider-row">
+    <div class="slider-header">
+      <label for="ret">Assumed annual return</label>
+      <span class="slider-value" id="ret-out">8%</span>
+    </div>
+    <input type="range" id="ret" min="4" max="12" step="0.5" value="8" />
+  </div>
+</div>
+
+<div class="section">
+  <h2>At age 18</h2>
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Years until 18</div>
+      <div class="metric-value" id="years-out">10</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Total contributed</div>
+      <div class="metric-value" id="contributed-out">$75,000</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Projected balance</div>
+      <div class="metric-value" id="balance18-out">$117,341</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Withdrawal scenario at 18</h2>
+  <div class="slider-row">
+    <div class="slider-header">
+      <label for="withdraw">Withdrawal amount</label>
+      <span class="slider-value" id="withdraw-out">$75,000</span>
+    </div>
+    <input type="range" id="withdraw" min="0" max="117341" step="500" value="75000" />
+    <div class="presets" id="presets">
+      <button data-amt="25000">$25K · small startup</button>
+      <button data-amt="50000">$50K · medium startup</button>
+      <button data-amt="contributions">contributions only</button>
+      <button data-amt="home">home down payment</button>
+    </div>
+  </div>
+  <label class="toggle-row" for="home">
+    <input type="checkbox" id="home" />
+    <span>First-time home purchase (unlocks $10K of earnings tax & penalty-free)</span>
+  </label>
+  <div class="radio-group">
+    <label class="radio-option">
+      <input type="radio" name="future" value="continues" checked />
+      <div class="radio-title">Continues contributing</div>
+      <div class="radio-sub">She keeps maxing the Roth from 18 to 60</div>
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="future" value="stops" />
+      <div class="radio-title">Stops contributing</div>
+      <div class="radio-sub">No further deposits after 18</div>
+    </label>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Withdrawal day results</h2>
+  <div class="metrics">
+    <div class="metric success">
+      <div class="metric-label">Net cash to her</div>
+      <div class="metric-value" id="cash-out">$75,000</div>
+    </div>
+    <div class="metric warning">
+      <div class="metric-label">Tax + penalty</div>
+      <div class="metric-value" id="tax-out">$0</div>
+      <div class="metric-detail" id="tax-detail">all from contributions</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Left in Roth</div>
+      <div class="metric-value" id="left-out">$42,341</div>
+    </div>
+  </div>
+  <div class="future">
+    <div class="future-label">Projected at age 60</div>
+    <div class="future-grid">
+      <div class="future-card">
+        <div class="future-sub">If she didn't withdraw</div>
+        <div class="future-value" id="nowithdraw-out">$5.44M</div>
+        <div class="future-note" id="nowithdraw-note">includes future contributions</div>
+      </div>
+      <div class="future-card delta">
+        <div class="future-sub">After this withdrawal</div>
+        <div class="future-value" id="future-out">$3.54M</div>
+        <div class="future-note" id="future-note">$1.90M less than untouched</div>
+      </div>
+    </div>
+  </div>
+  <button class="share" id="share-btn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    <span id="share-text">Copy scenario link</span>
+  </button>
+</div>
+
+<div class="explainer">
+  <h3>The three plays, ranked by cleanliness</h3>
+  <ul>
+    <li><strong style="color:var(--text)">Startup capital ($25K–contributions only)</strong> — Take only contributions. Zero tax, zero penalty. The growth keeps compounding.</li>
+    <li><strong style="color:var(--text)">Home purchase ($contributions + $10K)</strong> — Use the first-time-buyer exception on $10K of earnings, tax and penalty-free. Once-in-a-lifetime credit.</li>
+    <li><strong style="color:var(--text)">More than that</strong> — You're cutting into taxable earnings: 10% income tax + 10% early withdrawal penalty = ~20¢ per earnings dollar. Use sparingly.</li>
+  </ul>
+
+  <h3>Assumptions baked in</h3>
+  <ul>
+    <li>Beginning-of-year contributions, compounded annually at the rate you set.</li>
+    <li>Retirement age 60.</li>
+    <li>At 18, contributions come out first by IRS ordering rules — no choice involved.</li>
+    <li>"Continues contributing" assumes the same annual contribution amount through age 60.</li>
+    <li>Tax estimate for non-qualified earnings withdrawal assumes 10% federal income bracket + 10% early-withdrawal penalty.</li>
+    <li>Ignores Hawaii / state tax, inflation, and contribution-limit increases (the limit has historically risen ~$500 every 1-2 years).</li>
+  </ul>
+
+  <h3>Why this works (the structural requirements)</h3>
+  <ul>
+    <li>Your business must be a sole proprietorship or a partnership where the only partners are the child's parents (a spousal LLC taxed as a partnership qualifies). S-corp / C-corp doesn't get the same payroll tax exemption.</li>
+    <li>Wages must be reasonable for actual work performed and documented (time logs, W-2 issued).</li>
+    <li>The Roth IRA must be opened as a custodial Roth IRA for Kids — Fidelity, Schwab, and Vanguard all offer this.</li>
+    <li>The 5-year rule on Roth earnings starts the year of the first contribution — start early to back-date the clock.</li>
+  </ul>
+</div>
+
+<footer>
+  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">I built this for my own family and figured someone else might find it useful. No signup, no upsell, no tracking. If you spot something I got wrong or have ideas to make it better, I'd genuinely love to hear them.</p>
+  <p><strong>Educational tool only. Not financial, tax, or legal advice.</strong> Calculations are estimates and depend on assumptions that may not match reality. Tax law changes; consult a CPA and a licensed financial advisor before acting. Past investment returns do not guarantee future results.</p>
+</footer>
+
+</div>
+
+<script>
+(function() {
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => '$' + Math.round(n).toLocaleString();
+  const fmtBig = (n) => {
+    if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+    if (Math.abs(n) >= 1e3) return '$' + Math.round(n/1e3) + 'K';
+    return '$' + Math.round(n);
+  };
+
+  const inputs = {
+    age: $('age'),
+    contrib: $('contrib'),
+    ret: $('ret'),
+    withdraw: $('withdraw'),
+    home: $('home')
+  };
+
+  function getReturn() {
+    return parseFloat(inputs.ret.value) / 100;
+  }
+
+  function fvAnnuityDue(pmt, rate, n) {
+    if (n <= 0) return 0;
+    if (rate === 0) return pmt * n;
+    return pmt * (((Math.pow(1 + rate, n) - 1) / rate)) * (1 + rate);
+  }
+
+  function compound(pv, rate, n) {
+    return pv * Math.pow(1 + rate, n);
+  }
+
+  function recalc() {
+    const age = Math.max(0, Math.min(17, parseInt(inputs.age.value) || 0));
+    const contrib = Math.max(0, parseFloat(inputs.contrib.value) || 0);
+    const rate = getReturn();
+    const yearsTo18 = 18 - age;
+    const totalContributed = contrib * yearsTo18;
+    const balance18 = fvAnnuityDue(contrib, rate, yearsTo18);
+
+    $('ret-out').textContent = (rate * 100).toFixed(rate * 100 % 1 === 0 ? 0 : 1) + '%';
+    $('years-out').textContent = yearsTo18;
+    $('contributed-out').textContent = fmt(totalContributed);
+    $('balance18-out').textContent = fmt(balance18);
+
+    inputs.withdraw.max = Math.round(balance18);
+    if (parseInt(inputs.withdraw.value) > balance18) {
+      inputs.withdraw.value = Math.round(balance18);
+    }
+
+    const w = parseFloat(inputs.withdraw.value) || 0;
+    const isHome = inputs.home.checked;
+    const contribsTaken = Math.min(w, totalContributed);
+    const earningsTaken = Math.max(0, w - totalContributed);
+    const exemptEarnings = isHome ? Math.min(earningsTaken, 10000) : 0;
+    const taxableEarnings = earningsTaken - exemptEarnings;
+    const taxPenalty = taxableEarnings * 0.20;
+    const netCash = w - taxPenalty;
+    const leftInRoth = balance18 - w;
+
+    $('withdraw-out').textContent = fmt(w);
+    $('cash-out').textContent = fmt(netCash);
+    $('tax-out').textContent = fmt(taxPenalty);
+
+    let detail;
+    if (w === 0) detail = 'no withdrawal';
+    else if (earningsTaken === 0) detail = 'all from contributions';
+    else if (isHome && taxableEarnings === 0) detail = 'home exception covers earnings';
+    else detail = '~20% on ' + fmt(taxableEarnings) + ' of earnings';
+    $('tax-detail').textContent = detail;
+    $('left-out').textContent = fmt(leftInRoth);
+
+    const yearsTo60 = 42;
+    const futureChoice = document.querySelector('input[name="future"]:checked').value;
+    const continues = futureChoice === 'continues';
+
+    let fvNoWithdraw, fvWithWithdraw;
+    if (continues) {
+      const futureContribsValue = fvAnnuityDue(contrib, rate, yearsTo60);
+      fvNoWithdraw = compound(balance18, rate, yearsTo60) + futureContribsValue;
+      fvWithWithdraw = compound(leftInRoth, rate, yearsTo60) + futureContribsValue;
+    } else {
+      fvNoWithdraw = compound(balance18, rate, yearsTo60);
+      fvWithWithdraw = compound(leftInRoth, rate, yearsTo60);
+    }
+    const delta = fvNoWithdraw - fvWithWithdraw;
+
+    $('nowithdraw-out').textContent = fmtBig(fvNoWithdraw);
+    $('nowithdraw-note').textContent = continues ? 'includes future contributions' : 'no further contributions';
+    $('future-out').textContent = fmtBig(fvWithWithdraw);
+    $('future-note').textContent = fmtBig(delta) + ' less than untouched';
+
+    updatePresetActive(w, totalContributed);
+  }
+
+  function updatePresetActive(w, totalContributed) {
+    const presets = document.querySelectorAll('#presets button');
+    presets.forEach(b => {
+      b.classList.remove('active');
+      let target;
+      if (b.dataset.amt === 'contributions') target = Math.round(totalContributed);
+      else if (b.dataset.amt === 'home') target = Math.round(totalContributed + 10000);
+      else target = parseInt(b.dataset.amt);
+      if (Math.abs(w - target) < 250) b.classList.add('active');
+    });
+  }
+
+  Object.values(inputs).forEach(el => {
+    el.addEventListener('input', recalc);
+    el.addEventListener('change', recalc);
+  });
+  document.querySelectorAll('input[name="future"]').forEach(r => r.addEventListener('change', recalc));
+
+  document.querySelectorAll('#presets button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const age = parseInt(inputs.age.value) || 0;
+      const contrib = parseFloat(inputs.contrib.value) || 0;
+      const totalContributed = contrib * (18 - age);
+      let amt;
+      if (btn.dataset.amt === 'contributions') {
+        amt = Math.round(totalContributed);
+      } else if (btn.dataset.amt === 'home') {
+        amt = Math.round(totalContributed + 10000);
+        inputs.home.checked = true;
+      } else {
+        amt = parseInt(btn.dataset.amt);
+      }
+      inputs.withdraw.value = Math.min(amt, parseInt(inputs.withdraw.max));
+      recalc();
+    });
+  });
+
+  function buildShareUrl() {
+    const params = new URLSearchParams();
+    params.set('age', inputs.age.value);
+    params.set('contrib', inputs.contrib.value);
+    params.set('ret', inputs.ret.value);
+    params.set('w', inputs.withdraw.value);
+    params.set('home', inputs.home.checked ? '1' : '0');
+    params.set('future', document.querySelector('input[name="future"]:checked').value);
+    return window.location.origin + window.location.pathname + '?' + params.toString();
+  }
+
+  function loadFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('age')) inputs.age.value = params.get('age');
+    if (params.has('contrib')) inputs.contrib.value = params.get('contrib');
+    if (params.has('ret')) inputs.ret.value = params.get('ret');
+    if (params.has('w')) inputs.withdraw.value = params.get('w');
+    if (params.has('home')) inputs.home.checked = params.get('home') === '1';
+    if (params.has('future')) {
+      const v = params.get('future');
+      const radio = document.querySelector('input[name="future"][value="' + v + '"]');
+      if (radio) radio.checked = true;
+    }
+  }
+
+  $('share-btn').addEventListener('click', () => {
+    const url = buildShareUrl();
+    const text = $('share-text');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => {
+        $('share-btn').classList.add('copied');
+        text.textContent = 'Link copied!';
+        setTimeout(() => {
+          $('share-btn').classList.remove('copied');
+          text.textContent = 'Copy scenario link';
+        }, 2000);
+      });
+    } else {
+      prompt('Copy this link:', url);
+    }
+  });
+
+  loadFromUrl();
+  recalc();
+})();
+</script>
+
+</body>
+</html>
